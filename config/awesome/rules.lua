@@ -8,7 +8,7 @@ local keybindings = require("keybindings")
 awful.rules.rules = {
     -- All clients will match this rule.
     { rule = { },
-	  --exclude_any = { class = { "Xfce4-appfinder", "xfce4-appfinder" }},
+	  exclude_any = { class = { "conky"}, name = {"conky"}},
       properties = { border_width = beautiful.border_width,
                      border_color = beautiful.border_normal,
                      focus = awful.client.focus.filter,
