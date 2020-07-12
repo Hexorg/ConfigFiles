@@ -1,5 +1,6 @@
 vscode = ${HOME}/.vscode
 vimrc = ${HOME}/.vimrc
+bashrc = ${HOME}/.bashrc
 config/awesome = ${HOME}/.config/awesome
 config/conky = ${HOME}/.config/conky
 config/picom = ${HOME}/.config/picom
