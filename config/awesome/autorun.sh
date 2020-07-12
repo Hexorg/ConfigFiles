@@ -11,4 +11,6 @@ run /usr/libexec/polkit-gnome-authentication-agent-1
 run nm-applet
 run xfce4-power-manager
 run blueman-applet
-run compton -b --config ${HOME}/.config/compton/compton.conf
+run xscreensaver -nosplash
+run picom -b
+run ssh-agent > ${HOME}/.ssh-agent
