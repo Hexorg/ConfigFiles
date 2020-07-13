@@ -50,7 +50,7 @@ def compare_files(src, dst):
         
 
 def for_all_entries(repo_path, system_path, destination_extras):
-    if os.path.isdir(repo_path) and os.path.isdir(system_path):
+    if os.path.isdir(repo_path) and (os.path.isdir(system_path) or not os.path.exists(system_path)):
         return for_all_paths(repo_path, system_path, destination_extras)
     elif os.path.isdir(repo_path) or os.path.isdir(system_path):
         if os.path.isdir(system_path):
@@ -64,25 +64,30 @@ def for_all_entries(repo_path, system_path, destination_extras):
         return compare_files(repo_path, system_path)
 
 def for_all_paths(repo_path, system_path, destination_extras):
-    repo_fs = set(os.listdir(repo_path))
-    system_fs = set(os.listdir(system_path))
-    common = repo_fs.intersection(system_fs)
-    uncommon = repo_fs.symmetric_difference(system_fs)
     isModified = False
-    for item in common:
-        isModified &= for_all_entries(os.path.join(repo_path, item), os.path.join(system_path, item), destination_extras)
-    for item in uncommon:
-        if item in repo_fs:
-            src = os.path.join(repo_path, item)
-            dst = os.path.join(system_path, item)
-            print(f"New item {item} in {system_path} (from {src})")
-            if os.path.isdir(src):
-                shutil.copytree(src, dst)
+    if not os.path.exists(system_path):
+        print(f"No folder {repo_path} in the system. Updating.")
+        shutil.copytree(repo_path, system_path)
+        isModified = True
+    else:
+        repo_fs = set(os.listdir(repo_path))
+        system_fs = set(os.listdir(system_path))
+        common = repo_fs.intersection(system_fs)
+        uncommon = repo_fs.symmetric_difference(system_fs)
+        for item in common:
+            isModified &= for_all_entries(os.path.join(repo_path, item), os.path.join(system_path, item), destination_extras)
+        for item in uncommon:
+            if item in repo_fs:
+                src = os.path.join(repo_path, item)
+                dst = os.path.join(system_path, item)
+                print(f"New item {item} in {system_path} (from {src})")
+                if os.path.isdir(src):
+                    shutil.copytree(src, dst)
+                else:
+                    shutil.copy(src, dst)
+                isModified = True
             else:
-                shutil.copy(src, dst)
-            isModified = True
-        else:
-            destination_extras.append((system_path, item))
+                destination_extras.append((system_path, item))
     return isModified
             
         
