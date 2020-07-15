@@ -13,4 +13,5 @@ run xfce4-power-manager
 run blueman-applet
 run xscreensaver -nosplash
 run picom -b
+run pasystray
 run ssh-agent > ${HOME}/.ssh-agent
